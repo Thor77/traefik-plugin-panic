@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  traefik:
+    image: "traefik:v2.9.6"
+    command:
+      - "--providers.docker=true"
+      - "--entrypoints.http.address=:80"
+      - "--experimental.localPlugins.forward.moduleName=github.com/thor77/forward"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./forward:/plugins-local/src/github.com/thor77/forward/"
+    ports:
+      - 8080:80
+  httpbin:
+    image: kennethreitz/httpbin
+    labels:
+      - "traefik.http.routers.httpbin.rule=Host(`httpbin`)"
+      - "traefik.http.routers.httpbin.middlewares=forward@docker"
+      - "traefik.http.middlewares.forward.plugin.forward.enabled=true" # dummy config to create middleware

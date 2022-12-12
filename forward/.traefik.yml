@@ -1,0 +1,9 @@
+displayName: Forward
+type: middleware
+iconPath: .assets/icon.png
+
+import: github.com/thor77/forward
+
+summary: 'Forward requests to reproduce panic'
+
+testData: {}
